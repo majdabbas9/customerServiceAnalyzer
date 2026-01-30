@@ -49,7 +49,7 @@ public class Interaction {
         }
 
         public Builder transcribeAgent() throws IOException, InterruptedException {
-            this.clientSideCall = this.transcriber.transcribeAgent();
+            this.agentSideCall = this.transcriber.transcribeAgent();
             return this;
         }
 

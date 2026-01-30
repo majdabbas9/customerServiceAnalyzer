@@ -28,23 +28,33 @@ public class CallTranscriber {
             prop.load(fis);
             String url = prop.getProperty("TRANSCRIBE_API_URL");
             if (url != null && !url.isEmpty()) {
-                return url + "/transcibe"; // Matches user's typo 'transcibe'
+                return url + "/transcribe";
             }
         } catch (Exception e) {
             // Log error
         }
-        return "http://localhost:8000/transcibe";
+        // Try looking in call_analyzer/.env if running from root
+        try (FileInputStream fis = new FileInputStream("call_analyzer/.env")) {
+            prop.load(fis);
+            String url = prop.getProperty("TRANSCRIBE_API_URL");
+            if (url != null && !url.isEmpty()) {
+                return url + "/transcribe";
+            }
+        } catch (Exception e) {
+            // Log error
+        }
+        return "http://localhost:8000/transcribe";
     }
 
     public String transcribeClient() throws IOException, InterruptedException {
-        return sendTranscriptionRequest(clientFilePath);
+        return sendTranscriptionRequest(clientFilePath, "whisper");
     }
 
     public String transcribeAgent() throws IOException, InterruptedException {
-        return sendTranscriptionRequest(agentFilePath);
+        return sendTranscriptionRequest(agentFilePath, "whisper");
     }
 
-    private String sendTranscriptionRequest(Path filePath) throws IOException, InterruptedException {
+    private String sendTranscriptionRequest(Path filePath, String model_name) throws IOException, InterruptedException {
         String boundary = "JavaHttpClientBoundary" + UUID.randomUUID().toString();
         HttpClient client = HttpClient.newHttpClient();
 
@@ -53,10 +63,10 @@ public class CallTranscriber {
 
         // Build Multipart Body
         StringBuilder bodyBuilder = new StringBuilder();
-        // Parameter: file_name
+        // Parameter: model
         bodyBuilder.append("--").append(boundary).append("\r\n");
-        bodyBuilder.append("Content-Disposition: form-data; name=\"file_name\"\r\n\r\n");
-        bodyBuilder.append(fileName).append("\r\n");
+        bodyBuilder.append("Content-Disposition: form-data; name=\"model_name\"\r\n\r\n");
+        bodyBuilder.append(model_name).append("\r\n");
 
         // Parameter: file
         bodyBuilder.append("--").append(boundary).append("\r\n");

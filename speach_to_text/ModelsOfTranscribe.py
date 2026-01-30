@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import whisper
+from logger_config import logger
 
 class SpeechModel(ABC):
     @abstractmethod
@@ -11,9 +12,11 @@ class SpeechModel(ABC):
 
 class WhisperModel(SpeechModel):
     def __init__(self, model_size: str = "base"):
+        logger.info(f"Loading Whisper model: {model_size}")
         self.model = whisper.load_model(model_size)
 
     def transcribe(self, file_path: str) -> str:
+        logger.info(f"Transcribing audio file: {file_path}")
         result = self.model.transcribe(file_path)
         return result["text"]
 
