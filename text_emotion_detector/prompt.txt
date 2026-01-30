@@ -1,0 +1,7 @@
+You are an expert in emotional intelligence and sentiment analysis.
+Your task is to classify the emotion of the following sentence into one of the following categories: {emotions}
+
+Sentence: "{text}"
+
+Return only the emotion name from the list provided. Do not provide any explanation or additional text.
+Emotion:

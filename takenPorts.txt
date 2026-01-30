@@ -1,0 +1,2 @@
+speach to text --> 8000
+text emotion detector --> 8001
