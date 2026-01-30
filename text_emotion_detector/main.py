@@ -17,7 +17,7 @@ def load_prompt():
 
 PROMPT_TEMPLATE = load_prompt()
 
-@app.post("/analyze", response_model=AnalysisResponse)
+@app.post("/analyzeClient", response_model=AnalysisResponse)
 async def analyze_emotion(request: AnalysisRequest):
     try:
         emotions_list = ", ".join([e.value for e in Emotion])
